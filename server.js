@@ -14,12 +14,12 @@ app.use(express.static('public'));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
 app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, 'public/notes.html')));
 
-app.get('/api/notes', (req, res) => res.json(db));
-// app.get('/api/notes/:id', (req, res) => {
-//     const requestedNote = req.params.id;
-//     const note = db.find(note => note.id === requestedNote);
-//     if (note) return res.json(note);
-// });
+app.get('/api/notes', (req, res) => {
+    const notesData = fs.readFileSync('./db/db.json', 'utf8');
+    const notesArr = notesData.length ? JSON.parse(notesData) : [];
+    return res.json(notesArr);
+});
+
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
 
 app.post('/api/notes', (req, res) => {
