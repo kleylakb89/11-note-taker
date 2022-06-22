@@ -35,9 +35,8 @@ app.post('/api/notes', (req, res) => {
 
 app.delete('/api/notes/:id', (req, res) => {
     const requestedNote = req.params.id;
-    const note = db.find(note => note.id === requestedNote);
-    db.splice((Object.keys(db).find(key => db[key] === note)), 1);
-    const dbString = JSON.stringify(db, null, 2);
+    const notes = db.filter(note => note.id !== requestedNote);
+    const dbString = JSON.stringify(notes, null, 2);
 
     fs.writeFile('./db/db.json', dbString, err => err ? console.log(err) : res.json('Note deleted!'));
 });
