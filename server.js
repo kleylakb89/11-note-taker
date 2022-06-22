@@ -34,8 +34,10 @@ app.post('/api/notes', (req, res) => {
 });
 
 app.delete('/api/notes/:id', (req, res) => {
+    const notesData = fs.readFileSync('./db/db.json', 'utf8');
+    const notesArr = notesData.length ? JSON.parse(notesData) : [];
     const requestedNote = req.params.id;
-    const notes = db.filter(note => note.id !== requestedNote);
+    const notes = notesArr.filter(note => note.id !== requestedNote);
     const dbString = JSON.stringify(notes, null, 2);
 
     fs.writeFile('./db/db.json', dbString, err => err ? console.log(err) : res.json('Note deleted!'));
